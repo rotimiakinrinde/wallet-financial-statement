@@ -1,4 +1,5 @@
 """
+wallet_analyzer.py
 Wallet Analyzer Service
 Orchestrates all wallet analysis operations with smart caching
 """

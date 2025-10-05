@@ -1,7 +1,11 @@
 """
+blockchain_clients.py
 Blockchain API Clients
 Manages connections to Etherscan, Moralis, CoinGecko
 """
+
+from dotenv import load_dotenv
+load_dotenv()  # Load environment variables from .env file
 
 import os
 import aiohttp
