@@ -11,18 +11,8 @@ from typing import List, Dict, Optional
 from datetime import datetime
 import logging
 
-
 logger = logging.getLogger(__name__)
 
-print("=" * 50)
-print("DEBUG: API KEYS CHECK")
-print(f"Etherscan key loaded: {os.getenv('ETHERSCAN_API_KEY') is not None}")
-print(f"Moralis key loaded: {os.getenv('MORALIS_API_KEY') is not None}")
-if os.getenv('ETHERSCAN_API_KEY'):
-    print(f"Etherscan key preview: {os.getenv('ETHERSCAN_API_KEY')[:10]}...")
-if os.getenv('MORALIS_API_KEY'):
-    print(f"Moralis key preview: {os.getenv('MORALIS_API_KEY')[:10]}...")
-print("=" * 50)
 
 class BlockchainClientManager:
     """Manages all blockchain API clients"""
@@ -36,6 +26,9 @@ class BlockchainClientManager:
         self.moralis_base = "https://deep-index.moralis.io/api/v2.2"
         self.coingecko_base = "https://api.coingecko.com/api/v3"
         
+        # Log API key status (won't show actual keys)
+        logger.info(f"Etherscan API key loaded: {bool(self.etherscan_key)}")
+        logger.info(f"Moralis API key loaded: {bool(self.moralis_key)}")
         logger.info("BlockchainClientManager initialized")
     
     async def fetch_etherscan_transactions(self, wallet_address: str) -> pd.DataFrame:
