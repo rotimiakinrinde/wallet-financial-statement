@@ -54,8 +54,27 @@ class WalletAnalyzer:
         if transactions_df.empty:
             return {
                 "wallet_address": wallet_address,
-                "status": "no_transactions",
-                "message": "No transactions found for this wallet"
+                "analysis_date": datetime.now().isoformat(),
+                "summary": {
+                    "transaction_breakdown": {"total": 0, "inbound": 0, "outbound": 0},
+                    "token_statistics": {"unique_tokens": 0, "top_tokens": {}},
+                    "financial_metrics": {
+                        "total_value_usd": 0.0,
+                        "total_gas_fees_usd": 0.0,
+                        "total_income_usd": 0.0,
+                        "total_expenses_usd": 0.0,
+                        "net_income_usd": 0.0
+                    },
+                    "gains_losses": {
+                        "realized_gains_usd": 0.0,
+                        "unrealized_gains_usd": 0.0,
+                        "total_gains_usd": 0.0
+                    }
+                },
+                "transactions_count": 0,
+                "date_range": {"start": None, "end": None},
+                "data_sources": ["etherscan", "moralis"],
+                "cached": False
             }
         
         # Step 2: Enhance with metadata and pricing
@@ -91,6 +110,7 @@ class WalletAnalyzer:
         # Store processed dataframes in cache as joblib
         self.cache.set("analysis", f"{wallet_address}_transactions", cost_basis_df)
         self.cache.set("analysis", f"{wallet_address}_tracker", tracker)
+        self.cache.cache_wallet_analysis(wallet_address, analysis_result)
         
         logger.info(f"Analysis complete for {wallet_address}")
         return analysis_result
@@ -155,7 +175,22 @@ class WalletAnalyzer:
         """Generate summary statistics"""
         
         if transactions_df.empty:
-            return {}
+            return {
+                "transaction_breakdown": {"total": 0, "inbound": 0, "outbound": 0},
+                "token_statistics": {"unique_tokens": 0, "top_tokens": {}},
+                "financial_metrics": {
+                    "total_value_usd": 0.0,
+                    "total_gas_fees_usd": 0.0,
+                    "total_income_usd": 0.0,
+                    "total_expenses_usd": 0.0,
+                    "net_income_usd": 0.0
+                },
+                "gains_losses": {
+                    "realized_gains_usd": 0.0,
+                    "unrealized_gains_usd": 0.0,
+                    "total_gains_usd": 0.0
+                }
+            }
         
         # Transaction breakdown
         total_txs = len(transactions_df)
@@ -439,10 +474,25 @@ class WalletAnalyzer:
                 "cached": True
             }
         
-        # If no cache, return basic info
+        # If no cache, return empty summary structure
         return {
             "wallet_address": wallet_address,
-            "status": "not_analyzed",
-            "message": "No analysis available. Run /api/v1/wallet/analyze first.",
+            "summary": {
+                "transaction_breakdown": {"total": 0, "inbound": 0, "outbound": 0},
+                "token_statistics": {"unique_tokens": 0, "top_tokens": {}},
+                "financial_metrics": {
+                    "total_value_usd": 0.0,
+                    "total_gas_fees_usd": 0.0,
+                    "total_income_usd": 0.0,
+                    "total_expenses_usd": 0.0,
+                    "net_income_usd": 0.0
+                },
+                "gains_losses": {
+                    "realized_gains_usd": 0.0,
+                    "unrealized_gains_usd": 0.0,
+                    "total_gains_usd": 0.0
+                }
+            },
+            "last_updated": None,
             "cached": False
         }
