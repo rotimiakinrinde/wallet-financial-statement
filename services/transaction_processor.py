@@ -108,7 +108,7 @@ class TransactionProcessor:
                 enhanced_df.at[idx, 'token_symbol'] = meta.get('symbol', 'UNKNOWN')
                 enhanced_df.at[idx, 'token_name'] = meta.get('name', 'Unknown')
                 enhanced_df.at[idx, 'token_decimals'] = meta.get('decimals', 18)
-                enhanced_df.at[idx, 'is_stablecoin'] = meta.get('is_stablecoin', False)
+                enhanced_df.at[idx, 'is_stablecoin'] = bool(meta.get('is_stablecoin', False))
         
         return enhanced_df
     
