@@ -59,6 +59,3 @@ WCFS automatically processes your Ethereum wallet and delivers:
 - **Staking/airdrop** income identification  
 - Export in **CSV**, **JSON**, or **PDF**
 
----
-
-## 🏗️ System Architecture
